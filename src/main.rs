@@ -2,7 +2,7 @@ use rtqdm::progress::ProgressIteratorExtention;
 use std::thread::sleep;
 
 fn main() {
-    let vector = vec![1, 2, 3];
+    let vector = vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
     for number in vector
         .iter()

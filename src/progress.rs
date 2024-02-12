@@ -23,12 +23,17 @@ impl ProgressDisplay for Unbounded {
 
 impl ProgressDisplay for Bounded {
     fn display<Iter>(&self, progress: &Progress<Iter, Self>) {
+        let percentage = (progress.count as f64 / self.bound as f64) * 100.0;
+        let filled = (percentage as usize / 2) as usize; // assuming each '█' represents 2%
+        let unfilled = 50 - filled; // total length of progress bar is 50
+
         println!(
-            "{}{}{}{}",
-            self.delimiters.unwrap_or(('[', ']')).0,
-            "#".repeat(progress.count),
-            " ".repeat(self.bound - progress.count),
-            self.delimiters.unwrap_or(('[', ']')).1
+            "{:3.0}% |{}{}| {}/{}",
+            percentage,
+            "█".repeat(filled),
+            " ".repeat(unfilled),
+            progress.count,
+            self.bound
         );
     }
 }
