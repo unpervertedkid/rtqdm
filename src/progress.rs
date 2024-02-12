@@ -57,7 +57,6 @@ where
             iter: self.iter,
             count: self.count,
             bound,
-        
         }
     }
 }
@@ -71,14 +70,15 @@ impl<Iter> Progress<Iter, Bounded> {
 
 impl<Iter, Bound> Iterator for Progress<Iter, Bound>
 where
-    Iter: Iterator, Bound: ProgressDisplay,
+    Iter: Iterator,
+    Bound: ProgressDisplay,
 {
     type Item = Iter::Item;
 
     fn next(&mut self) -> Option<Self::Item> {
         print!("{}", CLEAR);
 
-        self.bound.display(&self);
+        self.bound.display(self);
         self.count += 1;
 
         self.iter.next()

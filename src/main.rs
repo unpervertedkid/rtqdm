@@ -1,10 +1,15 @@
-use std::thread::sleep;
 use rtqdm::progress::ProgressIteratorExtention;
+use std::thread::sleep;
 
 fn main() {
     let vector = vec![1, 2, 3];
-    
-    for number in vector.iter().progress().with_bound().with_delimiters(('*', '*')) {
+
+    for number in vector
+        .iter()
+        .progress()
+        .with_bound()
+        .with_delimiters(('*', '*'))
+    {
         expensive_calculation(&number);
     }
 
