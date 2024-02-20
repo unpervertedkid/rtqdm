@@ -17,7 +17,7 @@ trait ProgressDisplay: Sized {
 
 impl ProgressDisplay for Unbounded {
     fn display<Iter>(&self, progress: &Progress<Iter, Self>) {
-        println!("{}", "#".repeat(progress.count));
+        println!("Iterations: {}", progress.count);
     }
 }
 
