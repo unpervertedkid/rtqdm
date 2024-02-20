@@ -4,6 +4,30 @@ pub struct Unbounded;
 pub struct Bounded {
     bound: usize,
     delimiters: Option<(char, char)>,
+    progress_bar_style: ProgressBarStyle,
+}
+
+impl Bounded {
+    pub fn with_progress_bar_style(mut self, style: ProgressBarStyle) -> Self {
+        self.progress_bar_style = style;
+        self
+    }
+}
+
+pub struct ProgressBarStyle {
+    filled_char: char,
+    unfilled_char: char,
+    total_length: usize,
+}
+
+impl Default for ProgressBarStyle {
+    fn default() -> Self {
+        Self {
+            filled_char: '█',
+            unfilled_char: ' ',
+            total_length: 50,
+        }
+    }
 }
 pub struct Progress<Iter, Bound> {
     iter: Iter,
@@ -24,14 +48,14 @@ impl ProgressDisplay for Unbounded {
 impl ProgressDisplay for Bounded {
     fn display<Iter>(&self, progress: &Progress<Iter, Self>) {
         let percentage = (progress.count as f64 / self.bound as f64) * 100.0;
-        let filled = (percentage as usize / 2) as usize; // assuming each '█' represents 2%
-        let unfilled = 50 - filled; // total length of progress bar is 50
+        let filled = (percentage as usize / 2) as usize; // assuming each filled_char represents 2%
+        let unfilled = self.progress_bar_style.total_length - filled;
 
         println!(
             "{:3.0}% |{}{}| {}/{}",
             percentage,
-            "█".repeat(filled),
-            " ".repeat(unfilled),
+            self.progress_bar_style.filled_char.to_string().repeat(filled),
+            self.progress_bar_style.unfilled_char.to_string().repeat(unfilled),
             progress.count,
             self.bound
         );
@@ -56,6 +80,7 @@ where
         let bound = Bounded {
             bound: self.iter.len(),
             delimiters: None,
+            progress_bar_style: ProgressBarStyle::default(),
         };
 
         Progress {
